@@ -1,0 +1,88 @@
+<?php
+if (function_exists('acf_add_local_field_group')):
+  acf_add_local_field_group(array(
+    'key' => 'group_5d08e56ceefe7',
+    'title' => 'Query settings',
+    'fields' => array(
+      array(
+        'key' => 'field_5ec52667d46f6',
+        'label' => 'Välj index',
+        'name' => 'query_indices',
+        'type' => 'select',
+        'instructions' => '',
+        'required' => 0,
+        'conditional_logic' => 0,
+        'wrapper' => array(
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ),
+        'default_value' => '',
+        'allow_null' => 1,
+        'multiple' => 1,
+        'placeholder' => '',
+        'disabled' => 0,
+        'readonly' => 0,
+      ),
+      array(
+        'key' => 'field_5d08f3977691a',
+        'label' => 'Boosta posttyp',
+        'name' => 'boost_post_type',
+        'type' => 'posttype_select',
+        'instructions' => '',
+        'required' => 0,
+        'conditional_logic' => 0,
+        'wrapper' => array(
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ),
+        'default_value' => '',
+        'allow_null' => 1,
+        'multiple' => 1,
+        'placeholder' => '',
+        'disabled' => 0,
+        'readonly' => 0,
+      ),
+      array(
+        'key' => 'field_5d137a554828b',
+        'label' => 'Minsta poäng för relevans',
+        'name' => 'ws_ep_min_score',
+        'type' => 'number',
+        'instructions' =>
+          'Kontrollera gränsen för vilka resultat som anses relevanta. Värdet går att expirementera för men gäller globalt för alla sökord. Det går att skriva med decimaler ex. 2,7',
+        'required' => 0,
+        'conditional_logic' => 0,
+        'wrapper' => array(
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ),
+        'default_value' => 2,
+        'placeholder' => '',
+        'prepend' => '',
+        'append' => '',
+        'min' => 0,
+        'max' => 50,
+        'step' => '0.1',
+      ),
+    ),
+    'location' => array(
+      array(
+        array(
+          'param' => 'options_page',
+          'operator' => '==',
+          'value' => 'municipio-elasticsearch-query',
+        ),
+      ),
+    ),
+    'menu_order' => 0,
+    'position' => 'normal',
+    'style' => 'default',
+    'label_placement' => 'top',
+    'instruction_placement' => 'label',
+    'hide_on_screen' => '',
+    'active' => 1,
+    'description' => '',
+  ));
+endif;
