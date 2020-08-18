@@ -43,7 +43,8 @@ class Query {
     $resultsPerPage = 10,
     $sort = null,
     $sortOrder = "asc",
-    $indices = null
+    $indices = null,
+    $allowEmptySearch = false
   ) {
     $index_query = implode($this->_indices, ',');
 
@@ -66,172 +67,85 @@ class Query {
       ],
     ];
 
-    $query['query'] = [
-      'function_score' => [
-        'query' => [
-          'bool' => [
-            'must' => [
-              [
-                'multi_match' => [
-                  'query' => $searchQuery,
-                  'fields' => [
-                    "post_title^1",
-                    "post_excerpt^1",
-                    "post_content_filtered^1",
-                    "post_author.display_name^1",
-                    "terms.post_tag.name^1",
-                    "terms.category.name^1",
-                    "attachments.attachment.content^1",
+    if ($searchQuery !== "" || ($searchQuery === "" && !$allowEmptySearch)) {
+      $query['query'] = [
+        'function_score' => [
+          'query' => [
+            'bool' => [
+              'must' => [
+                [
+                  'multi_match' => [
+                    'query' => $searchQuery,
+                    'fields' => [
+                      "post_title^1",
+                      "post_excerpt^1",
+                      "post_content_filtered^1",
+                      "post_author.display_name^1",
+                      "terms.post_tag.name^1",
+                      "terms.category.name^1",
+                      "attachments.attachment.content^1",
+                    ],
+                    'boost' => 4,
+                    'minimum_should_match' => "100%",
                   ],
-                  'boost' => 4,
-                  'minimum_should_match' => "100%",
+                ],
+                [
+                  'multi_match' => [
+                    'query' => $searchQuery,
+                    'fields' => [
+                      "post_title^1",
+                      "post_excerpt^1",
+                      "post_content_filtered^1",
+                      "post_author.display_name^1",
+                      "terms.post_tag.name^1",
+                      "terms.category.name^1",
+                      "attachments.attachment.content^1",
+                    ],
+                    'boost' => 2,
+                    'fuzziness' => 0,
+                  ],
+                ],
+                [
+                  'multi_match' => [
+                    'query' => $searchQuery,
+                    'fields' => [
+                      "post_title^1",
+                      "post_excerpt^1",
+                      "post_content_filtered^1",
+                      "post_author.display_name^1",
+                      "terms.post_tag.name^1",
+                      "terms.category.name^1",
+                      "attachments.attachment.content^1",
+                    ],
+                    'fuzziness' => 'AUTO',
+                  ],
                 ],
               ],
-              [
-                'multi_match' => [
-                  'query' => $searchQuery,
-                  'fields' => [
-                    "post_title^1",
-                    "post_excerpt^1",
-                    "post_content_filtered^1",
-                    "post_author.display_name^1",
-                    "terms.post_tag.name^1",
-                    "terms.category.name^1",
-                    "attachments.attachment.content^1",
+              'should' => [
+                [
+                  'multi_match' => [
+                    'query' => $searchQuery,
+                    'type' => 'phrase',
+                    'fields' => [
+                      "post_title^1",
+                      "post_excerpt^1",
+                      "post_content_filtered^1",
+                      "post_author.display_name^1",
+                      "terms.post_tag.name^1",
+                      "terms.category.name^1",
+                      "attachments.attachment.content^1",
+                    ],
+                    'boost' => 4,
                   ],
-                  'boost' => 2,
-                  'fuzziness' => 0,
-                ],
-              ],
-              [
-                'multi_match' => [
-                  'query' => $searchQuery,
-                  'fields' => [
-                    "post_title^1",
-                    "post_excerpt^1",
-                    "post_content_filtered^1",
-                    "post_author.display_name^1",
-                    "terms.post_tag.name^1",
-                    "terms.category.name^1",
-                    "attachments.attachment.content^1",
-                  ],
-                  'fuzziness' => 'AUTO',
-                ],
-              ],
-            ],
-            'should' => [
-              [
-                'multi_match' => [
-                  'query' => $searchQuery,
-                  'type' => 'phrase',
-                  'fields' => [
-                    "post_title^1",
-                    "post_excerpt^1",
-                    "post_content_filtered^1",
-                    "post_author.display_name^1",
-                    "terms.post_tag.name^1",
-                    "terms.category.name^1",
-                    "attachments.attachment.content^1",
-                  ],
-                  'boost' => 4,
                 ],
               ],
             ],
           ],
+          "score_mode" => "avg",
+          "boost_mode" => "sum",
         ],
-        "score_mode" => "avg",
-        "boost_mode" => "sum",
-      ],
-    ];
-
-    // elasticQuery.query = {
-    //   function_score: {
-    //     query: {
-    //       bool: {
-    //         must: [
-    //           {
-    //             multi_match: {
-    //               query: query,
-    //               fields: [
-    //                 "post_title^1",
-    //                 "post_excerpt^1",
-    //                 "post_content_filtered^1",
-    //                 "post_author.display_name^1",
-    //                 "terms.post_tag.name^1",
-    //                 "terms.category.name^1",
-    //                 "attachments.attachment.content^1",
-    //               ],
-    //               boost: 4,
-    //               minimum_should_match: "100%",
-    //             },
-    //           },
-    //           {
-    //             multi_match: {
-    //               query: query,
-    //               fields: [
-    //                 "post_title^1",
-    //                 "post_excerpt^1",
-    //                 "post_content_filtered^1",
-    //                 "post_author.display_name^1",
-    //                 "terms.post_tag.name^1",
-    //                 "terms.category.name^1",
-    //                 "attachments.attachment.content^1",
-    //               ],
-    //               boost: 2,
-    //               fuzziness: 0,
-    //             },
-    //           },
-    //           {
-    //             multi_match: {
-    //               query: query,
-    //               fields: [
-    //                 "post_title^1",
-    //                 "post_excerpt^1",
-    //                 "post_content_filtered^1",
-    //                 "post_author.display_name^1",
-    //                 "terms.post_tag.name^1",
-    //                 "terms.category.name^1",
-    //                 "attachments.attachment.content^1",
-    //               ],
-    //               fuzziness: "AUTO",
-    //             },
-    //           },
-    //         ],
-    //         should: [
-    //           {
-    //             multi_match: {
-    //               query: query,
-    //               type: "phrase",
-    //               fields: [
-    //                 "post_title^1",
-    //                 "post_excerpt^1",
-    //                 "post_content_filtered^1",
-    //                 "post_author.display_name^1",
-    //                 "terms.post_tag.name^1",
-    //                 "terms.category.name^1",
-    //                 "attachments.attachment.content^1",
-    //               ],
-    //               boost: 4,
-    //             },
-    //           },
-    //         ],
-    //       },
-    //     },
-    //     functions: [
-    //       {
-    //         exp: {
-    //           post_date_gmt: {
-    //             scale: "14d",
-    //             decay: 0.25,
-    //             offset: "30d",
-    //           },
-    //         },
-    //       },
-    //     ],
-    //     score_mode: "avg",
-    //     boost_mode: "sum",
-    //   },
-    // };
+      ];
+    }
 
     $query['aggs'] = [
       'post_type' => [
@@ -248,18 +162,24 @@ class Query {
       ],
     ];
 
-    // // 3. Highlight
-    // elasticQuery.highlight = {
-    //   pre_tags: ["<mark>"],
-    //   post_tags: ["</mark>"],
-    //   fields: {
-    //     post_title: {},
-    //     post_content_filtered: { no_match_size: 150 },
-    //     "attachments.attachment.content": { no_match_size: 150 },
-    //   },
-    // };
+    // 3. Highlight
+    $query['highlight'] = [
+      'pre_tags' => ["<mark>"],
+      'post_tags' => ["</mark>"],
+      'fields' => [
+        'post_title' => ['number_of_fragments' => 1],
+        'post_content_filtered' => [
+          'no_match_size' => 300,
+          'number_of_fragments' => 1,
+        ],
+        'attachments.attachment.content' => [
+          'no_match_size' => 300,
+          'number_of_fragments' => 1,
+        ],
+      ],
+    ];
 
-    // // 4. Post filter
+    // 4. Post filter
     if ($postType !== null) {
       $query['post_filter'] = [
         'bool' => ['must' => [['term' => ['post_type.raw' => $postType]]]],
