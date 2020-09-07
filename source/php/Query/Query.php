@@ -7,6 +7,7 @@ class Query {
   private $_indices = [];
   public $results = [];
   public $aggregations = [];
+  public $highlight = [];
   public $resultCount = 0;
 
   public function __construct() {
@@ -33,6 +34,16 @@ class Query {
     if (empty($this->aggregations) && !empty($response['aggregations'])) {
       $this->aggregations = $response['aggregations'];
     }
+
+    if (empty($this->highlight) && !empty($response['hits']['hits'])) {
+      foreach ($response['hits']['hits'] as $nr => $hit) {
+        if (!empty($hit['highlight'])) {
+          $this->highlight[$nr] = $hit['highlight'];
+        }
+      }
+    }
+    print_R('here');
+
     return $hits;
   }
 
@@ -49,11 +60,6 @@ class Query {
     $index_query = implode($this->_indices, ',');
 
     $elasticsearch = new Elasticsearch();
-
-    // $formatted_args = Indexables::factory()
-    //   ->get('post')
-    //   ->format_args([], []);
-    // print_R($formatted_args);
 
     $query = [
       "from" => $from,
