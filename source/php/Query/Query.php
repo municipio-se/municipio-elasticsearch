@@ -42,7 +42,6 @@ class Query {
         }
       }
     }
-    print_R('here');
 
     return $hits;
   }
