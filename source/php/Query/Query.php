@@ -56,7 +56,7 @@ class Query {
     $indices = null,
     $allowEmptySearch = false
   ) {
-    if ($indices !== null) {
+    if (!empty($indices)) {
       $index_query = implode($indices, ',');
     } elseif (!empty($this->_indices)) {
       $index_query = implode($this->_indices, ',');
