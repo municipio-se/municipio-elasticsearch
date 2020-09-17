@@ -56,7 +56,11 @@ class Query {
     $indices = null,
     $allowEmptySearch = false
   ) {
-    $index_query = implode($this->_indices, ',');
+    if ($indices !== null) {
+      $index_query = implode($indices, ',');
+    } elseif (!empty($this->_indices)) {
+      $index_query = implode($this->_indices, ',');
+    }
 
     $elasticsearch = new Elasticsearch();
 
