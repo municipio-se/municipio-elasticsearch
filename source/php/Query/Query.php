@@ -89,6 +89,7 @@ class Query {
                       "post_title^1",
                       "post_excerpt^1",
                       "post_content_filtered^1",
+                      "post_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
@@ -105,6 +106,7 @@ class Query {
                       "post_title^1",
                       "post_excerpt^1",
                       "post_content_filtered^1",
+                      "post_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
@@ -121,6 +123,7 @@ class Query {
                       "post_title^1",
                       "post_excerpt^1",
                       "post_content_filtered^1",
+                      "post_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
@@ -139,6 +142,7 @@ class Query {
                       "post_title^1",
                       "post_excerpt^1",
                       "post_content_filtered^1",
+                      "post_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
@@ -178,6 +182,10 @@ class Query {
       'fields' => [
         'post_title' => ['number_of_fragments' => 1],
         'post_content_filtered' => [
+          'no_match_size' => 300,
+          'number_of_fragments' => 1,
+        ],
+        'post_content' => [
           'no_match_size' => 300,
           'number_of_fragments' => 1,
         ],
