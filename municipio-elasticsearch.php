@@ -1,9 +1,11 @@
 <?php
 /**
  * Plugin Name:       Municipio Elasticsearch
- * Description:       Improve search
+ * Plugin URI:        https://github.com/whitespace-se/municipio-elasticsearch
+ * Description:       Manages search configuration and integration between modularity & elasticpress.
  * Version:           0.0.1
  * Author:            Whitespace AB
+ * Author URI:        https://whitespace.se/
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       municipio-elasticsearch
