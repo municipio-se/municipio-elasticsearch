@@ -3,7 +3,7 @@
  * Plugin Name:       Municipio Elasticsearch
  * Plugin URI:        https://github.com/whitespace-se/municipio-elasticsearch
  * Description:       Manages search configuration and integration between modularity & elasticpress.
- * Version:           0.0.1
+ * Version:           0.1.0
  * Author:            Whitespace AB
  * Author URI:        https://whitespace.se/
  * License:           MIT
