@@ -13,7 +13,7 @@
  */
 
 // Protect agains direct file access
-if (!defined('WPINC')) {
+if (!defined("WPINC")) {
   die();
 }
 
@@ -26,30 +26,24 @@ $plugin_path = plugin_dir_path(__FILE__);
   plugin_basename(dirname(__FILE__)) . '/languages'
 );*/
 
-require_once $plugin_path .
-  'source/php/Vendor/Psr4ClassLoader.php';
-if (file_exists($plugin_path . 'vendor/autoload.php')) {
-  require_once $plugin_path . 'vendor/autoload.php';
+require_once $plugin_path . "source/php/Vendor/Psr4ClassLoader.php";
+if (file_exists($plugin_path . "vendor/autoload.php")) {
+  require_once $plugin_path . "vendor/autoload.php";
 }
 
 // Instantiate and register the autoloader
 $loader = new \MunicipioElasticsearch\Vendor\Psr4ClassLoader();
-$loader->addPrefix('MunicipioElasticsearch', $plugin_path);
-$loader->addPrefix(
-  'MunicipioElasticsearch',
-  $plugin_path . 'source/php/'
-);
+$loader->addPrefix("MunicipioElasticsearch", $plugin_path);
+$loader->addPrefix("MunicipioElasticsearch", $plugin_path . "source/php/");
 $loader->register();
 
-add_action('plugins_loaded', function () use($plugin_path) {
+add_action("plugins_loaded", function () use ($plugin_path) {
   $acfExportManager = new \AcfExportManager\AcfExportManager();
-  $acfExportManager->setTextdomain('municipio-elasticsearch');
-  $acfExportManager->setExportFolder(
-    $plugin_path . 'source/php/AcfFields/'
-  );
-  $acfExportManager->autoExport(array(
-    'elasticsearch-settings' => 'group_5d08f2f81c66d',
-  ));
+  $acfExportManager->setTextdomain("municipio-elasticsearch");
+  $acfExportManager->setExportFolder($plugin_path . "source/php/AcfFields/");
+  $acfExportManager->autoExport([
+    "elasticsearch-settings" => "group_5d08f2f81c66d",
+  ]);
   $acfExportManager->import();
 });
 

@@ -6,25 +6,25 @@ use ElasticPress\Elasticsearch;
 
 class Query {
   public function __construct() {
-    add_action('plugins_loaded', array($this, 'init'));
+    add_action("plugins_loaded", [$this, "init"]);
 
-    add_filter('acf/load_field/name=query_indices', array($this, 'indices'));
+    add_filter("acf/load_field/name=query_indices", [$this, "indices"]);
   }
 
   public function init() {
   }
 
   public function indices($field) {
-    $indices = $this->remote_request_helper('_cat/indices?format=json');
+    $indices = $this->remote_request_helper("_cat/indices?format=json");
 
-    $field['choices'] = array();
+    $field["choices"] = [];
 
     if (is_array($indices)) {
       foreach ($indices as $index) {
-        $field['choices'][$index['index']] = $index['index'];
+        $field["choices"][$index["index"]] = $index["index"];
       }
 
-      ksort($field['choices']);
+      ksort($field["choices"]);
     }
 
     return $field;
