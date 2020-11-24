@@ -47,14 +47,6 @@ class Indexing {
   }
 
   public function init() {
-    if (function_exists('acf_add_options_page')) {
-      acf_add_options_sub_page(array(
-        'page_title' => 'Indexing',
-        'menu_title' => 'Indexing',
-        'menu_slug' => 'municipio-elasticsearch-indexing',
-        'parent_slug' => Main::$MENU_SLUG,
-      ));
-    }
   }
 
   public function indexablePostTypes($post_types) {

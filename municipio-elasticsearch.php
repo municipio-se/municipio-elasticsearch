@@ -48,9 +48,7 @@ add_action('plugins_loaded', function () use($plugin_path) {
     $plugin_path . 'source/php/AcfFields/'
   );
   $acfExportManager->autoExport(array(
-    'municipio-elasticsearch-query' => 'group_5d08f2f81c66d',
-    'municipio-elasticsearch-synonyms' => 'group_5d08e58806d4c',
-    'municipio-elasticsearch-indexing' => 'group_5d08f2f81c66d',
+    'elasticsearch-settings' => 'group_5d08f2f81c66d',
   ));
   $acfExportManager->import();
 });

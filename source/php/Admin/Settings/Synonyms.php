@@ -10,14 +10,6 @@ class Synonyms {
   }
 
   public function pluginsInit() {
-    if (function_exists('acf_add_options_page')) {
-      acf_add_options_sub_page(array(
-        'page_title' => 'Synonyms Settings',
-        'menu_title' => 'Synonyms',
-        'menu_slug' => 'municipio-elasticsearch-synonyms',
-        'parent_slug' => Main::$MENU_SLUG,
-      ));
-    }
   }
 
   public function initSynonyms() {
