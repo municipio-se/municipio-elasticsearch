@@ -41,7 +41,7 @@ $loader->addPrefix(
 );
 $loader->register();
 
-add_action('plugins_loaded', function () {
+add_action('plugins_loaded', function () use($plugin_path) {
   $acfExportManager = new \AcfExportManager\AcfExportManager();
   $acfExportManager->setTextdomain('municipio-elasticsearch');
   $acfExportManager->setExportFolder(
