@@ -1,10 +1,10 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH;
+namespace MunicipioElasticsearch;
 
 class App {
   public function __construct() {
-    new \MUNICIPIO_ELASTICSEARCH\Admin\Settings\Main();
-    new \MUNICIPIO_ELASTICSEARCH\Query\Query();
-    // new \MUNICIPIO_ELASTICSEARCH\Indexing\Indexing();
+    new Admin\Settings\Main();
+    new Query\Query();
+    // new Indexing\Indexing();
   }
 }

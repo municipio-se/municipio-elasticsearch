@@ -1,5 +1,5 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin\Settings;
+namespace MunicipioElasticsearch\Admin\Settings;
 
 class Synonyms {
   public static $synonyms = array();

@@ -1,5 +1,8 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin\Settings;
+
+namespace MunicipioElasticsearch\Admin\Settings;
+
+use ElasticPress\Elasticsearch;
 
 class Query {
   public function __construct() {
@@ -36,7 +39,7 @@ class Query {
   }
 
   protected function remote_request_helper($path) {
-    $request = \ElasticPress\Elasticsearch::factory()->remote_request($path);
+    $request = Elasticsearch::factory()->remote_request($path);
 
     if (is_wp_error($request) || empty($request)) {
       return false;

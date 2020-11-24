@@ -1,7 +1,9 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Query;
-use ElasticPress\Elasticsearch as Elasticsearch;
-use ElasticPress\Indexables as Indexables;
+
+namespace MunicipioElasticsearch\Query;
+
+use ElasticPress\Elasticsearch;
+use ElasticPress\Indexables;
 
 class Query {
   private $_indices = [];

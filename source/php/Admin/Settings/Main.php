@@ -1,9 +1,6 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin\Settings;
 
-use MUNICIPIO_ELASTICSEARCH\Admin\Settings\Query;
-use MUNICIPIO_ELASTICSEARCH\Admin\Settings\Indexing;
-use MUNICIPIO_ELASTICSEARCH\Admin\Settings\Synonyms;
+namespace MunicipioElasticsearch\Admin\Settings;
 
 class Main {
   public static $MENU_SLUG = 'municipio-elasticsearch';

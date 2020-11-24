@@ -1,5 +1,6 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin;
+
+namespace MunicipioElasticsearch\Admin;
 
 class Tests {
   public function __construct() {

@@ -1,6 +1,8 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin\Settings;
-use ElasticPress\Indexables as Indexables;
+
+namespace MunicipioElasticsearch\Admin\Settings;
+
+use ElasticPress\Indexables;
 
 class Indexing {
   private $_includedPostTypes = array();
