@@ -113,6 +113,7 @@ class Indexing {
     } else {
       // Content without html tags
       $content = $post_args["post_content"];
+      $content = do_shortcode($content);
       $content = strip_tags($content);
       $post_args["municipio_content"] = $content;
 
