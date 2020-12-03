@@ -18,6 +18,7 @@ if (!defined("WPINC")) {
 }
 
 $plugin_path = plugin_dir_path(__FILE__);
+$plugin_url = plugin_dir_url(__FILE__);
 // define('WS_EP_SEARCH_URL', plugins_url('', __FILE__));
 
 /*load_plugin_textdomain(
@@ -48,4 +49,7 @@ add_action("plugins_loaded", function () use ($plugin_path) {
 });
 
 // Start application
-new \MunicipioElasticsearch\App();
+new \MunicipioElasticsearch\App([
+  "plugin_path" => $plugin_path,
+  "plugin_url" => $plugin_url,
+]);
