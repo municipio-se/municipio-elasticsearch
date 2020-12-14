@@ -31,19 +31,19 @@ class AutoSuggest {
   }
 
   public function enableCustomAutoSuggest() {
-    wp_enqueue_script(
+    wp_register_script(
       "municipio-elasticsearch-awesomplete",
       $this->settings["plugin_url"] . "source/js/lib/awesomplete.js",
-      ["jquery"],
+      [],
       "0.1"
     );
-    wp_enqueue_script(
+    wp_register_script(
       "municipio-elasticsearch-polyfill-closest",
       $this->settings["plugin_url"] . "source/js/lib/polyfill-closest.js",
       [],
       "0.1"
     );
-    wp_enqueue_script(
+    wp_register_script(
       "municipio-elasticsearch-autosuggest",
       $this->settings["plugin_url"] . "source/js/autosuggest.js",
       [
@@ -52,6 +52,7 @@ class AutoSuggest {
       ],
       "0.1.1"
     );
+    wp_enqueue_script("municipio-elasticsearch-autosuggest");
     wp_localize_script(
       "municipio-elasticsearch-autosuggest",
       "MunicipioElasticsearchAutosuggestOptions",
