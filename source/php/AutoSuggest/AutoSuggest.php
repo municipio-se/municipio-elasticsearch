@@ -19,6 +19,17 @@ class AutoSuggest {
     wp_dequeue_script("elasticpress-autosuggest");
   }
 
+  public function getSuggestions() {
+    $input = get_field("municipio_elasticsearch_suggestions", "option") ?: "";
+    preg_match_all('/^\s*(.+?)\s*$/m', $input, $matches);
+    $suggestions = $matches[1] ?? [];
+    $suggestions = apply_filters(
+      "municipio_elasticsearch_autosuggest_options",
+      $suggestions
+    );
+    return $suggestions;
+  }
+
   public function enableCustomAutoSuggest() {
     wp_enqueue_script(
       "municipio-elasticsearch-awesomplete",
@@ -45,7 +56,7 @@ class AutoSuggest {
       "municipio-elasticsearch-autosuggest",
       "MunicipioElasticsearchAutosuggestOptions",
       apply_filters("municipio_elasticsearch_autosuggest_options", [
-        "suggestions" => [],
+        "suggestions" => $this->getSuggestions(),
       ])
     );
   }

@@ -30,6 +30,7 @@ if (function_exists("acf_add_local_field_group")):
         "label" => "Indexera posttypernas arkiv",
         "name" => "indexed_post_type_archives",
         "type" => "true_false",
+        "instructions" => "",
         "required" => 0,
         "conditional_logic" => 0,
         "wrapper" => [
@@ -77,12 +78,16 @@ if (function_exists("acf_add_local_field_group")):
           "class" => "",
           "id" => "",
         ],
-        "default_value" => "",
+        "default_value" => [],
         "allow_null" => 1,
         "multiple" => 1,
         "placeholder" => "",
         "disabled" => 0,
         "readonly" => 0,
+        "choices" => [],
+        "ui" => 0,
+        "ajax" => 0,
+        "return_format" => "value",
       ],
       [
         "key" => "field_5d08f3977691a",
@@ -151,8 +156,8 @@ if (function_exists("acf_add_local_field_group")):
             "label" => "En Synonym",
             "name" => "one_synonym",
             "type" => "repeater",
-            "instructions" => 'Skapa en lista av synonymer för gemensamma ord.
-    Ordningen spelar ingen roll. Alla ord kommer att motsvara varandra och bli sökbara',
+            "instructions" =>
+              "Skapa en lista av synonymer för gemensamma ord. Ordningen spelar ingen roll. Alla ord kommer att motsvara varandra och bli sökbara",
             "required" => 0,
             "conditional_logic" => 0,
             "wrapper" => [
@@ -190,6 +195,25 @@ if (function_exists("acf_add_local_field_group")):
           ],
         ],
       ],
+      [
+        "key" => "field_5fd728fb9a045",
+        "label" => "Sökordsförslag",
+        "name" => "municipio_elasticsearch_suggestions",
+        "type" => "textarea",
+        "instructions" => "Ange sökordsförslag, ett per rad.",
+        "required" => 0,
+        "conditional_logic" => 0,
+        "wrapper" => [
+          "width" => "",
+          "class" => "",
+          "id" => "",
+        ],
+        "default_value" => "",
+        "placeholder" => "",
+        "maxlength" => "",
+        "rows" => "",
+        "new_lines" => "",
+      ],
     ],
     "location" => [
       [
@@ -206,7 +230,7 @@ if (function_exists("acf_add_local_field_group")):
     "label_placement" => "top",
     "instruction_placement" => "label",
     "hide_on_screen" => "",
-    "active" => 1,
+    "active" => true,
     "description" => "",
   ]);
 endif;
