@@ -4,7 +4,7 @@ var suggestions = window.MunicipioElasticsearchAutosuggestOptions.suggestions;
 var AutoSuggest = AutoSuggest !== undefined ? AutoSuggest : {};
 AutoSuggest.Front = AutoSuggest.Front || {};
 
-AutoSuggest.Front.suggest = (function ($) {
+AutoSuggest.Front.suggest = (function () {
   function Suggest() {
     this.init();
     this.cachedResponses = {}; // Query bases responses
@@ -106,4 +106,4 @@ AutoSuggest.Front.suggest = (function ($) {
   };
 
   return new Suggest();
-})(jQuery);
+})();
