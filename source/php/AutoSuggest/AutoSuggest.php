@@ -19,15 +19,20 @@ class AutoSuggest {
     wp_dequeue_script("elasticpress-autosuggest");
   }
 
-  public function getSuggestions() {
+  public function getOptions() {
     $input = get_field("municipio_elasticsearch_suggestions", "option") ?: "";
     preg_match_all('/^\s*(.+?)\s*$/m', $input, $matches);
-    $suggestions = $matches[1] ?? [];
-    $suggestions = apply_filters(
+    $options['suggestions'] = $matches[1] ?? [];
+    $options = apply_filters(
       "municipio_elasticsearch_autosuggest_options",
-      $suggestions
+      $options
     );
-    return $suggestions;
+    return $options;
+  }
+
+  public function getSuggestions() {
+    $options = $this->getOptions();
+    return $options['suggestions'] ?? [];
   }
 
   public function enableCustomAutoSuggest() {
