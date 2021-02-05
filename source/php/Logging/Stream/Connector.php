@@ -43,10 +43,7 @@ class Connector extends BaseConnector {
    * @return array
    */
   public function get_context_labels() {
-    return [
-      "foo" => __("Foo", "municipio-elasticsearch"),
-      "bar" => __("Bar", "municipio-elasticsearch"),
-    ];
+    return [];
   }
 
   /**
@@ -74,21 +71,21 @@ class Connector extends BaseConnector {
    *
    * @return array Action links
    */
-  public function action_links($links, $record) {
-    // Check if the Foo or Bar exists
-    if ($record->object_id && get_post_status($record->object_id)) {
-      $post_type_name = $this->get_post_type_name(
-        get_post_type($record->object_id)
-      );
-      $action_link_text = sprintf(
-        esc_html_x("Edit %s", "Post type singular name", "stream"),
-        $post_type_name
-      );
-      $links[$action_link_text] = get_edit_post_link($record->object_id);
-    }
+  // public function action_links($links, $record) {
+  //   // Check if the Foo or Bar exists
+  //   if ($record->object_id && get_post_status($record->object_id)) {
+  //     $post_type_name = $this->get_post_type_name(
+  //       get_post_type($record->object_id)
+  //     );
+  //     $action_link_text = sprintf(
+  //       esc_html_x("Edit %s", "Post type singular name", "stream"),
+  //       $post_type_name
+  //     );
+  //     $links[$action_link_text] = get_edit_post_link($record->object_id);
+  //   }
 
-    return $links;
-  }
+  //   return $links;
+  // }
 
   /**
    * Track bulk indexing
