@@ -104,6 +104,7 @@ class Post extends ElasticPressPost {
     return $result;
   }
   public function retry_bulk_index($object_ids) {
+    do_action("ep_before_retry_bulk_index", $object_ids, $this->slug);
     $chunks = array_chunk($object_ids, ceil(count($object_ids) / 2));
     foreach ($chunks as $object_ids) {
       $result = $this->bulk_index($object_ids);
