@@ -124,12 +124,13 @@ class Connector extends BaseConnector {
     }
     if (is_wp_error($result)) {
       $action = "bulk_index";
-      $post = get_post($object_id);
       foreach ($object_ids as $object_id) {
+        $post = get_post($object_id);
         $this->log(
           // Summary message
           sprintf(
-            __("Could not index \"%s\".", "municipio-elasticsearch"),
+            __("Could not index %s \"%s\".", "municipio-elasticsearch"),
+            $this->get_post_type_name($post->post_type),
             $post->post_title
           ),
           // This array is compacted and saved as Stream meta
