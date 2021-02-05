@@ -11,5 +11,13 @@ class App {
     new Query\Query();
     // new Indexing\Indexing();
     new AutoSuggest\AutoSuggest($this->settings);
+
+    add_action("plugins_loaded", [$this, "registerIndexables"], 10);
+  }
+
+  public function registerIndexables() {
+    if (class_exists("\ElasticPress\Indexables")) {
+      \ElasticPress\Indexables::factory()->register(new Indexable\Post\Post());
+    }
   }
 }
