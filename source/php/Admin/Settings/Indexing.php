@@ -105,7 +105,7 @@ class Indexing {
       }
 
       // File size
-      $filesize = filesize(get_attached_file($post_id));
+      $filesize = @filesize(get_attached_file($post_id));
       if (!empty($filesize)) {
         $post_args["municipio_filesize"] = $filesize;
         $post_args["municipio_filesize_format"] = size_format($filesize, 2);
