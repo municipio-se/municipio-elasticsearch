@@ -43,7 +43,9 @@ class Connector extends BaseConnector {
    * @return array
    */
   public function get_context_labels() {
-    return [];
+    return [
+      "post" => __("Post", "municipio-elasticsearch"),
+    ];
   }
 
   /**
@@ -62,6 +64,24 @@ class Connector extends BaseConnector {
   }
 
   /**
+   * Gets the singular post type label
+   *
+   * @param string $post_type_slug  Post type slug.
+   *
+   * @return string Post type label
+   */
+  public function get_post_type_name($post_type_slug) {
+    $name = esc_html__("Post", "stream"); // Default.
+
+    if (post_type_exists($post_type_slug)) {
+      $post_type = get_post_type_object($post_type_slug);
+      $name = $post_type->labels->singular_name;
+    }
+
+    return $name;
+  }
+
+  /**
    * Add action links to Stream drop row in admin list screen
    *
    * This method is optional.
@@ -71,21 +91,24 @@ class Connector extends BaseConnector {
    *
    * @return array Action links
    */
-  // public function action_links($links, $record) {
-  //   // Check if the Foo or Bar exists
-  //   if ($record->object_id && get_post_status($record->object_id)) {
-  //     $post_type_name = $this->get_post_type_name(
-  //       get_post_type($record->object_id)
-  //     );
-  //     $action_link_text = sprintf(
-  //       esc_html_x("Edit %s", "Post type singular name", "stream"),
-  //       $post_type_name
-  //     );
-  //     $links[$action_link_text] = get_edit_post_link($record->object_id);
-  //   }
-
-  //   return $links;
-  // }
+  public function action_links($links, $record) {
+    switch ($record->context) {
+      case "post":
+        // Check if the Foo or Bar exists
+        if ($record->object_id) {
+          $post_type_name = $this->get_post_type_name(
+            get_post_type($record->object_id)
+          );
+          $action_link_text = sprintf(
+            esc_html_x("Edit %s", "Post type singular name", "stream"),
+            $post_type_name
+          );
+          $links[$action_link_text] = get_edit_post_link($record->object_id);
+        }
+        break;
+    }
+    return $links;
+  }
 
   /**
    * Track bulk indexing
@@ -101,10 +124,14 @@ class Connector extends BaseConnector {
     }
     if (is_wp_error($result)) {
       $action = "bulk_index";
+      $post = get_post($object_id);
       foreach ($object_ids as $object_id) {
         $this->log(
           // Summary message
-          sprintf(__("Could not index post.", "municipio-elasticsearch")),
+          sprintf(
+            __("Could not index \"%s\".", "municipio-elasticsearch"),
+            $post->post_title
+          ),
           // This array is compacted and saved as Stream meta
           [
             "error" => true,
@@ -112,7 +139,7 @@ class Connector extends BaseConnector {
             "slug" => $slug,
           ],
           $object_id, // Object ID
-          null, // Context
+          "post", // Context
           $action
         );
       }
