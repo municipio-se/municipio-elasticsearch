@@ -78,19 +78,18 @@ class Query {
       ],
     ];
 
-    if ($sort) {
-      $sortObj = [];
+    if ($sort !== null) {
       $sortKey = $sort;
 
       if ($sortKey === "post_title") {
         $sortKey .= ".raw";
       }
 
-      $sortObj[$sortKey] = [
-        'order' => $sortOrder,
+      $query["sort"] = [
+        $sortKey => [
+          'order' => $sortOrder
+        ]
       ];
-
-      $query["sort"] = $sortObj;
     }
 
     if ($searchQuery !== "" || ($searchQuery === "" && !$allowEmptySearch)) {
