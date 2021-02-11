@@ -1,6 +1,6 @@
 <?php
 
-namespace MUNICIPIO_ELASTICSEARCH\Vendor;
+namespace MunicipioElasticsearch\Vendor;
 
 /**
  * A PSR-4 compatible class loader.

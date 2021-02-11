@@ -1,7 +1,9 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Query;
-use ElasticPress\Elasticsearch as Elasticsearch;
-use ElasticPress\Indexables as Indexables;
+
+namespace MunicipioElasticsearch\Query;
+
+use ElasticPress\Elasticsearch;
+use ElasticPress\Indexables;
 
 class Query {
   private $_indices = [];
@@ -11,16 +13,16 @@ class Query {
   public $resultCount = 0;
 
   public function __construct() {
-    $this->_indices = get_field('query_indices', 'options');
+    $this->_indices = get_field("query_indices", "options");
 
-    add_action('ep_skip_query_integration', array(
+    add_action("ep_skip_query_integration", [
       $this,
-      'ep_skip_query_integration',
-    ));
+      "ep_skip_query_integration",
+    ]);
 
     add_filter(
-      'ep_get_hits_from_query',
-      array($this, 'ep_get_hits_from_query'),
+      "ep_get_hits_from_query",
+      [$this, "ep_get_hits_from_query"],
       10,
       2
     );
@@ -31,14 +33,14 @@ class Query {
   }
 
   public function ep_get_hits_from_query($hits, $response) {
-    if (empty($this->aggregations) && !empty($response['aggregations'])) {
-      $this->aggregations = $response['aggregations'];
+    if (empty($this->aggregations) && !empty($response["aggregations"])) {
+      $this->aggregations = $response["aggregations"];
     }
 
-    if (empty($this->highlight) && !empty($response['hits']['hits'])) {
-      foreach ($response['hits']['hits'] as $nr => $hit) {
-        if (!empty($hit['highlight'])) {
-          $this->highlight[$nr] = $hit['highlight'];
+    if (empty($this->highlight) && !empty($response["hits"]["hits"])) {
+      foreach ($response["hits"]["hits"] as $nr => $hit) {
+        if (!empty($hit["highlight"])) {
+          $this->highlight[$nr] = $hit["highlight"];
         }
       }
     }
@@ -52,14 +54,14 @@ class Query {
     $from = 0,
     $resultsPerPage = 10,
     $sort = null,
-    $sortOrder = "asc",
+    $sortOrder = "desc",
     $indices = null,
     $allowEmptySearch = false
   ) {
     if (!empty($indices)) {
-      $index_query = implode($indices, ',');
+      $index_query = implode(",", $indices);
     } elseif (!empty($this->_indices)) {
-      $index_query = implode($this->_indices, ',');
+      $index_query = implode(",", $this->_indices);
     }
 
     $elasticsearch = new Elasticsearch();
@@ -70,85 +72,95 @@ class Query {
       "sort" => [
         [
           "_score" => [
-            "order" => "desc",
+            "order" => $sortOrder,
           ],
         ],
       ],
     ];
 
+    if ($sort !== null) {
+      $sortKey = $sort;
+
+      if ($sortKey === "post_title") {
+        $sortKey .= ".raw";
+      }
+
+      $query["sort"] = [
+        $sortKey => [
+          'order' => $sortOrder
+        ]
+      ];
+    }
+
     if ($searchQuery !== "" || ($searchQuery === "" && !$allowEmptySearch)) {
-      $query['query'] = [
-        'function_score' => [
-          'query' => [
-            'bool' => [
-              'must' => [
+      $query["query"] = [
+        "function_score" => [
+          "query" => [
+            "bool" => [
+              "must" => [
                 [
-                  'multi_match' => [
-                    'query' => $searchQuery,
-                    'fields' => [
+                  "multi_match" => [
+                    "query" => $searchQuery,
+                    "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
-                      "post_content_filtered^1",
-                      "post_content^1",
+                      "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
                       "attachments.attachment.content^1",
                     ],
-                    'boost' => 4,
-                    'minimum_should_match' => "100%",
+                    "boost" => 4,
+                    "minimum_should_match" => "100%",
                   ],
                 ],
                 [
-                  'multi_match' => [
-                    'query' => $searchQuery,
-                    'fields' => [
+                  "multi_match" => [
+                    "query" => $searchQuery,
+                    "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
-                      "post_content_filtered^1",
-                      "post_content^1",
+                      "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
                       "attachments.attachment.content^1",
                     ],
-                    'boost' => 2,
-                    'fuzziness' => 0,
+                    "boost" => 2,
+                    "fuzziness" => 0,
                   ],
                 ],
                 [
-                  'multi_match' => [
-                    'query' => $searchQuery,
-                    'fields' => [
+                  "multi_match" => [
+                    "query" => $searchQuery,
+                    "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
-                      "post_content_filtered^1",
-                      "post_content^1",
+                      "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
                       "attachments.attachment.content^1",
                     ],
-                    'fuzziness' => 'AUTO',
+                    "fuzziness" => "AUTO",
                   ],
                 ],
               ],
-              'should' => [
+              "should" => [
                 [
-                  'multi_match' => [
-                    'query' => $searchQuery,
-                    'type' => 'phrase',
-                    'fields' => [
+                  "multi_match" => [
+                    "query" => $searchQuery,
+                    "type" => "phrase",
+                    "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
-                      "post_content_filtered^1",
-                      "post_content^1",
+                      "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
                       "terms.category.name^1",
                       "attachments.attachment.content^1",
                     ],
-                    'boost' => 4,
+                    "boost" => 4,
                   ],
                 ],
               ],
@@ -160,46 +172,42 @@ class Query {
       ];
     }
 
-    $query['aggs'] = [
-      'post_type' => [
-        'terms' => [
-          'field' => 'post_type.raw',
-          'size' => 10000,
+    $query["aggs"] = [
+      "post_type" => [
+        "terms" => [
+          "field" => "post_type.raw",
+          "size" => 10000,
         ],
       ],
-      'indices' => [
-        'terms' => [
-          'field' => '_index',
-          'size' => 10000,
+      "indices" => [
+        "terms" => [
+          "field" => "_index",
+          "size" => 10000,
         ],
       ],
     ];
 
     // 3. Highlight
-    $query['highlight'] = [
-      'pre_tags' => ["<mark>"],
-      'post_tags' => ["</mark>"],
-      'fields' => [
-        'post_title' => ['number_of_fragments' => 1],
-        'post_content_filtered' => [
-          'no_match_size' => 300,
-          'number_of_fragments' => 1,
+    $query["highlight"] = [
+      "pre_tags" => ["<mark>"],
+      "post_tags" => ["</mark>"],
+      "fields" => [
+        "post_title" => ["number_of_fragments" => 1],
+        "municipio_content" => [
+          "no_match_size" => 300,
+          "number_of_fragments" => 1,
         ],
-        'post_content' => [
-          'no_match_size' => 300,
-          'number_of_fragments' => 1,
-        ],
-        'attachments.attachment.content' => [
-          'no_match_size' => 300,
-          'number_of_fragments' => 1,
+        "attachments.attachment.content" => [
+          "no_match_size" => 300,
+          "number_of_fragments" => 1,
         ],
       ],
     ];
 
     // 4. Post filter
     if ($postType !== null) {
-      $query['post_filter'] = [
-        'bool' => ['must' => [['term' => ['post_type.raw' => $postType]]]],
+      $query["post_filter"] = [
+        "bool" => ["must" => [["term" => ["post_type.raw" => $postType]]]],
       ];
     }
 
@@ -218,13 +226,13 @@ class Query {
     // }
     // elasticQuery.sort.push("_score");
 
-    $data = $elasticsearch->query($index_query, 'post', $query, []);
+    $data = $elasticsearch->query($index_query, "post", $query, []);
 
-    if (!empty($data['documents'])) {
-      $this->results = $data['documents'];
+    if (!empty($data["documents"])) {
+      $this->results = $data["documents"];
     }
-    if (!empty($data['found_documents'])) {
-      $this->resultCount = $data['found_documents'];
+    if (!empty($data["found_documents"])) {
+      $this->resultCount = $data["found_documents"];
     }
   }
 }

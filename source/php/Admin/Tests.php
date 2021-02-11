@@ -1,53 +1,54 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin;
+
+namespace MunicipioElasticsearch\Admin;
 
 class Tests {
   public function __construct() {
-    if (!defined('ELASTICPRESS_TEST_ENV')) {
+    if (!defined("ELASTICPRESS_TEST_ENV")) {
       return;
     }
-    add_filter('wp', array($this, 'performTestSearch'));
+    add_filter("wp", [$this, "performTestSearch"]);
   }
 
   public function includeScoreForTests($post, $elasticRes) {
-    $post['post_excerpt'] = $elasticRes['_score'];
+    $post["post_excerpt"] = $elasticRes["_score"];
     return $post;
   }
 
   public function performTestSearch() {
-    if (isset($_GET['testsearch'])) {
+    if (isset($_GET["testsearch"])) {
       add_filter(
-        'ep_retrieve_the_post',
-        array($this, 'includeScoreForTests'),
+        "ep_retrieve_the_post",
+        [$this, "includeScoreForTests"],
         10,
         2
       );
-      $query = $_GET['testsearch'];
-      $take = $_GET['testtake'] ?: 10;
-      $testdate = $_GET['testdate'] ?: time();
-      $args = array(
-        's' => $_GET['testsearch'],
-        'posts_per_page' => $take,
-        'post_type' => 'any',
-      );
-      define('testdate', $testdate);
+      $query = $_GET["testsearch"];
+      $take = $_GET["testtake"] ?: 10;
+      $testdate = $_GET["testdate"] ?: time();
+      $args = [
+        "s" => $_GET["testsearch"],
+        "posts_per_page" => $take,
+        "post_type" => "any",
+      ];
+      define("testdate", $testdate);
       $query = new \WP_Query($args);
       $res = array_map(function ($post) {
-        return array(
-          'ID' => $post->ID,
-          'title' => $post->post_title,
-          'post_type' => $post->post_type,
-          'post_content' => $post->post_content,
-          'score' => $post->post_excerpt,
-        );
+        return [
+          "ID" => $post->ID,
+          "title" => $post->post_title,
+          "post_type" => $post->post_type,
+          "post_content" => $post->post_content,
+          "score" => $post->post_excerpt,
+        ];
       }, $query->posts);
       remove_filter(
-        'ep_retrieve_the_post',
-        array($this, 'includeScoreForTests'),
+        "ep_retrieve_the_post",
+        [$this, "includeScoreForTests"],
         10
       );
 
-      header('Content-Type: application/json');
+      header("Content-Type: application/json");
       echo json_encode($res);
       die();
     }

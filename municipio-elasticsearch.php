@@ -3,7 +3,7 @@
  * Plugin Name:       Municipio Elasticsearch
  * Plugin URI:        https://github.com/whitespace-se/municipio-elasticsearch
  * Description:       Manages search configuration and integration between modularity & elasticpress.
- * Version:           0.0.1
+ * Version:           0.1.0
  * Author:            Whitespace AB
  * Author URI:        https://whitespace.se/
  * License:           MIT
@@ -13,11 +13,12 @@
  */
 
 // Protect agains direct file access
-if (!defined('WPINC')) {
+if (!defined("WPINC")) {
   die();
 }
 
-define('MUNICIPIO_ELASTICSEARCH_PATH', plugin_dir_path(__FILE__));
+$plugin_path = plugin_dir_path(__FILE__);
+$plugin_url = plugin_dir_url(__FILE__);
 // define('WS_EP_SEARCH_URL', plugins_url('', __FILE__));
 
 /*load_plugin_textdomain(
@@ -26,34 +27,29 @@ define('MUNICIPIO_ELASTICSEARCH_PATH', plugin_dir_path(__FILE__));
   plugin_basename(dirname(__FILE__)) . '/languages'
 );*/
 
-require_once MUNICIPIO_ELASTICSEARCH_PATH .
-  'source/php/Vendor/Psr4ClassLoader.php';
-if (file_exists(MUNICIPIO_ELASTICSEARCH_PATH . 'vendor/autoload.php')) {
-  require_once MUNICIPIO_ELASTICSEARCH_PATH . 'vendor/autoload.php';
+require_once $plugin_path . "source/php/Vendor/Psr4ClassLoader.php";
+if (file_exists($plugin_path . "vendor/autoload.php")) {
+  require_once $plugin_path . "vendor/autoload.php";
 }
 
 // Instantiate and register the autoloader
-$loader = new MUNICIPIO_ELASTICSEARCH\Vendor\Psr4ClassLoader();
-$loader->addPrefix('MUNICIPIO_ELASTICSEARCH', MUNICIPIO_ELASTICSEARCH_PATH);
-$loader->addPrefix(
-  'MUNICIPIO_ELASTICSEARCH',
-  MUNICIPIO_ELASTICSEARCH_PATH . 'source/php/'
-);
+$loader = new \MunicipioElasticsearch\Vendor\Psr4ClassLoader();
+$loader->addPrefix("MunicipioElasticsearch", $plugin_path);
+$loader->addPrefix("MunicipioElasticsearch", $plugin_path . "source/php/");
 $loader->register();
 
-add_action('plugins_loaded', function () {
+add_action("plugins_loaded", function () use ($plugin_path) {
   $acfExportManager = new \AcfExportManager\AcfExportManager();
-  $acfExportManager->setTextdomain('municipio-elasticsearch');
-  $acfExportManager->setExportFolder(
-    MUNICIPIO_ELASTICSEARCH_PATH . 'source/php/AcfFields/'
-  );
-  $acfExportManager->autoExport(array(
-    'municipio-elasticsearch-query' => 'group_5d08f2f81c66d',
-    'municipio-elasticsearch-synonyms' => 'group_5d08e58806d4c',
-    'municipio-elasticsearch-indexing' => 'group_5d08f2f81c66d',
-  ));
+  $acfExportManager->setTextdomain("municipio-elasticsearch");
+  $acfExportManager->setExportFolder($plugin_path . "source/php/AcfFields/");
+  $acfExportManager->autoExport([
+    "elasticsearch-settings" => "group_5d08f2f81c66d",
+  ]);
   $acfExportManager->import();
 });
 
 // Start application
-new \MUNICIPIO_ELASTICSEARCH\App();
+new \MunicipioElasticsearch\App([
+  "plugin_path" => $plugin_path,
+  "plugin_url" => $plugin_url,
+]);

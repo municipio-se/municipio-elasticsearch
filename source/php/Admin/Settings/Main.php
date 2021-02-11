@@ -1,34 +1,21 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin\Settings;
 
-use MUNICIPIO_ELASTICSEARCH\Admin\Settings\Query;
-use MUNICIPIO_ELASTICSEARCH\Admin\Settings\Indexing;
-use MUNICIPIO_ELASTICSEARCH\Admin\Settings\Synonyms;
+namespace MunicipioElasticsearch\Admin\Settings;
 
 class Main {
-  public static $MENU_SLUG = 'municipio-elasticsearch';
+  public static $MENU_SLUG = "municipio-elasticsearch";
   public function __construct() {
-    add_action('plugins_loaded', array($this, 'init'));
+    add_action("init", [$this, "init"], 100);
+
+    add_filter("acf/load_value/name=use_algolia_search", "__return_false", 10);
+
     new Query();
     new Indexing();
     new Synonyms();
   }
 
   public function init() {
-    if (function_exists('acf_add_options_page')) {
-      acf_add_options_page(array(
-        'page_title' => __(
-          'Municipio Elasticsearch',
-          'municipio-elasticsearch'
-        ),
-        'menu_title' => __(
-          'Municipio Elasticsearch',
-          'municipio-elasticsearch'
-        ),
-        'menu_slug' => self::$MENU_SLUG,
-        'capability' => 'edit_posts',
-        'redirect' => true,
-      ));
-    }
+    // Disable Algolia search options field group
+    acf_remove_local_field_group("group_5a61b852f3f8c"); // Algolia sök
   }
 }

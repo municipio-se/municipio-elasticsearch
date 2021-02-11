@@ -1,42 +1,37 @@
 <?php
-namespace MUNICIPIO_ELASTICSEARCH\Admin\Settings;
+
+namespace MunicipioElasticsearch\Admin\Settings;
+
+use ElasticPress\Elasticsearch;
 
 class Query {
   public function __construct() {
-    add_action('plugins_loaded', array($this, 'init'));
+    add_action("plugins_loaded", [$this, "init"]);
 
-    add_filter('acf/load_field/name=query_indices', array($this, 'indices'));
+    add_filter("acf/load_field/name=query_indices", [$this, "indices"]);
   }
 
   public function init() {
-    if (function_exists('acf_add_options_page')) {
-      acf_add_options_sub_page(array(
-        'page_title' => 'Query',
-        'menu_title' => 'Query',
-        'menu_slug' => 'municipio-elasticsearch-query',
-        'parent_slug' => Main::$MENU_SLUG,
-      ));
-    }
   }
 
   public function indices($field) {
-    $indices = $this->remote_request_helper('_cat/indices?format=json');
+    $indices = $this->remote_request_helper("_cat/indices?format=json");
 
-    $field['choices'] = array();
+    $field["choices"] = [];
 
     if (is_array($indices)) {
       foreach ($indices as $index) {
-        $field['choices'][$index['index']] = $index['index'];
+        $field["choices"][$index["index"]] = $index["index"];
       }
 
-      ksort($field['choices']);
+      ksort($field["choices"]);
     }
 
     return $field;
   }
 
   protected function remote_request_helper($path) {
-    $request = \ElasticPress\Elasticsearch::factory()->remote_request($path);
+    $request = Elasticsearch::factory()->remote_request($path);
 
     if (is_wp_error($request) || empty($request)) {
       return false;
