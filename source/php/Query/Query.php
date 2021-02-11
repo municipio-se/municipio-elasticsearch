@@ -54,7 +54,7 @@ class Query {
     $from = 0,
     $resultsPerPage = 10,
     $sort = null,
-    $sortOrder = "asc",
+    $sortOrder = "desc",
     $indices = null,
     $allowEmptySearch = false
   ) {
@@ -72,11 +72,25 @@ class Query {
       "sort" => [
         [
           "_score" => [
-            "order" => "desc",
+            "order" => $sortOrder,
           ],
         ],
       ],
     ];
+
+    if ($sort !== null) {
+      $sortKey = $sort;
+
+      if ($sortKey === "post_title") {
+        $sortKey .= ".raw";
+      }
+
+      $query["sort"] = [
+        $sortKey => [
+          'order' => $sortOrder
+        ]
+      ];
+    }
 
     if ($searchQuery !== "" || ($searchQuery === "" && !$allowEmptySearch)) {
       $query["query"] = [
