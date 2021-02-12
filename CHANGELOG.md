@@ -1,3 +1,9 @@
+## 0.2.5 (February 11, 2021)
+
+### New features
+
+- Enable sorting of results by specific sort key and sort order
+
 ## 0.2.4 (February 5, 2021)
 
 ### New features
