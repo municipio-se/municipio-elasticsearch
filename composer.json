@@ -2,7 +2,7 @@
   "name": "municipio/municipio-elasticsearch",
   "description": "Elasticsearch plugin for Municipio",
   "type": "wordpress-plugin",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "authors": [
     {
       "name": "Whitespace Dev",
