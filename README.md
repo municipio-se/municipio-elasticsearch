@@ -15,5 +15,6 @@ WIP.
 - municipio_filesize_format - Attachment file size, formatted
 - municipio_content - Content without html tags
 - municipio_permalink - Permalink without base url
+- municipio_title - Title lowercase
 
 ## Query

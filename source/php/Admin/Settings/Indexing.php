@@ -117,6 +117,9 @@ class Indexing {
       $content = strip_tags($content);
       $post_args["municipio_content"] = $content;
 
+      // Title lowercase
+      $post_args["municipio_title"] = mb_strtolower($post_args["post_title"], 'UTF-8');
+
       // Permalink without home url
       $post_args["municipio_permalink"] = wp_make_link_relative(
         $post_args["permalink"]

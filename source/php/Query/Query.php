@@ -104,6 +104,7 @@ class Query {
                     "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
+                      "municipio_title^1",
                       "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
@@ -120,6 +121,7 @@ class Query {
                     "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
+                      "municipio_title^1",
                       "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
@@ -136,6 +138,7 @@ class Query {
                     "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
+                      "municipio_title^1",
                       "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
@@ -154,6 +157,7 @@ class Query {
                     "fields" => [
                       "post_title^1",
                       "post_excerpt^1",
+                      "municipio_title^1",
                       "municipio_content^1",
                       "post_author.display_name^1",
                       "terms.post_tag.name^1",
